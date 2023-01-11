@@ -7,22 +7,17 @@ package ids_proto;
 
 //declare the services for the student
 
-service StudentCRUD {
+service idsCRUD {
     rpc CreateQuestion(Question) returns (Status); //student creates question
-    rpc CreateComment(SolId) returns(Comment); //student create comment for the solution
+    rpc CreateComment(Comment) returns(Status); //student create comment for the solution
+    rpc CreateSolution(Solution) returns (Status); //mentor creates solution 
 }
-//declare services for the mentor
-service MentorCRUD {
-   rpc CreateSolution(Solution) returns (Status); //mentor creates solution
-   rpc CreateComment(SolId) returns (Comment); //mentor creates comment for solution
-}
+ 
 
 message Comment{
+    uint64 solutionid=2;
     string desc=1;
-}
-message SolId{
-    string id=1;
-}
+} 
 message Status{
     string id=1;
 }
@@ -30,8 +25,11 @@ message Question {
     string subject=1;
     string topic=2;
     string desc=3;
+    uint64 studentid=4;
 }
 
 message Solution {
     string explanation=1;
+    uint64 mentorid =2;
+    uint64 solutionid =3;
 }

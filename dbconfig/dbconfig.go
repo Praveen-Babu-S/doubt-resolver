@@ -13,6 +13,7 @@ func DBSetup() *gorm.DB {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	// defer db.Close()
 	return db
 }
 
@@ -21,23 +22,23 @@ func DBstart() *gorm.DB {
 	db := DBSetup()
 
 	//create students table
-	db.DropTable(&models.Student{})
+	// db.DropTable(&models.Student{})
 	db.CreateTable(&models.Student{})
 
 	//create mentors table
-	db.DropTable(&models.Mentor{})
+	// db.DropTable(&models.Mentor{})
 	db.CreateTable(&models.Mentor{})
 
 	//create quenstions table
-	db.DropTable(&models.Question{})
+	// db.DropTable(&models.Question{})
 	db.CreateTable(&models.Question{})
 
 	//create solutions table
-	db.DropTable(&models.Solution{})
+	// db.DropTable(&models.Solution{})
 	db.CreateTable(&models.Solution{})
 
 	// create comments table
-	db.DropTable(&models.Comment{})
+	// db.DropTable(&models.Comment{})
 	db.CreateTable(&models.Comment{})
 
 	//set foreign key for question table (student_id is foreign key here)

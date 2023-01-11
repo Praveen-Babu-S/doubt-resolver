@@ -22,10 +22,10 @@ type Mentor struct {
 
 type Question struct {
 	gorm.Model
-	Subject string `json:"subject,omitempty"`
-	Topic   string `json:"topic,omitempty"`
-	Desc    string `json:"desc,omitempty"`
-	// Status    bool     `json:"status,omitempty"`
+	Subject   string   `json:"subject,omitempty"`
+	Topic     string   `json:"topic,omitempty"`
+	Desc      string   `json:"desc,omitempty"`
+	Status    bool     `json:"status,omitempty"`
 	StudentId uint     `json:"student_id,omitempty"`
 	Solution  Solution `json:"solution,omitempty"`
 }
