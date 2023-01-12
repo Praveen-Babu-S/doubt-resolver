@@ -25,6 +25,10 @@ type IdsCRUDClient interface {
 	CreateQuestion(ctx context.Context, in *Question, opts ...grpc.CallOption) (*Status, error)
 	CreateComment(ctx context.Context, in *Comment, opts ...grpc.CallOption) (*Status, error)
 	CreateSolution(ctx context.Context, in *Solution, opts ...grpc.CallOption) (*Status, error)
+	UpdateQuestion(ctx context.Context, in *Question, opts ...grpc.CallOption) (*Status, error)
+	DeleteQuestion(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Status, error)
+	UpdateSolution(ctx context.Context, in *Solution, opts ...grpc.CallOption) (*Status, error)
+	DeleteSolution(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Status, error)
 }
 
 type idsCRUDClient struct {
@@ -62,6 +66,42 @@ func (c *idsCRUDClient) CreateSolution(ctx context.Context, in *Solution, opts .
 	return out, nil
 }
 
+func (c *idsCRUDClient) UpdateQuestion(ctx context.Context, in *Question, opts ...grpc.CallOption) (*Status, error) {
+	out := new(Status)
+	err := c.cc.Invoke(ctx, "/ids_proto.idsCRUD/UpdateQuestion", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *idsCRUDClient) DeleteQuestion(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Status, error) {
+	out := new(Status)
+	err := c.cc.Invoke(ctx, "/ids_proto.idsCRUD/DeleteQuestion", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *idsCRUDClient) UpdateSolution(ctx context.Context, in *Solution, opts ...grpc.CallOption) (*Status, error) {
+	out := new(Status)
+	err := c.cc.Invoke(ctx, "/ids_proto.idsCRUD/UpdateSolution", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *idsCRUDClient) DeleteSolution(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Status, error) {
+	out := new(Status)
+	err := c.cc.Invoke(ctx, "/ids_proto.idsCRUD/DeleteSolution", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // IdsCRUDServer is the server API for IdsCRUD service.
 // All implementations must embed UnimplementedIdsCRUDServer
 // for forward compatibility
@@ -69,6 +109,10 @@ type IdsCRUDServer interface {
 	CreateQuestion(context.Context, *Question) (*Status, error)
 	CreateComment(context.Context, *Comment) (*Status, error)
 	CreateSolution(context.Context, *Solution) (*Status, error)
+	UpdateQuestion(context.Context, *Question) (*Status, error)
+	DeleteQuestion(context.Context, *Id) (*Status, error)
+	UpdateSolution(context.Context, *Solution) (*Status, error)
+	DeleteSolution(context.Context, *Id) (*Status, error)
 	mustEmbedUnimplementedIdsCRUDServer()
 }
 
@@ -84,6 +128,18 @@ func (UnimplementedIdsCRUDServer) CreateComment(context.Context, *Comment) (*Sta
 }
 func (UnimplementedIdsCRUDServer) CreateSolution(context.Context, *Solution) (*Status, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateSolution not implemented")
+}
+func (UnimplementedIdsCRUDServer) UpdateQuestion(context.Context, *Question) (*Status, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateQuestion not implemented")
+}
+func (UnimplementedIdsCRUDServer) DeleteQuestion(context.Context, *Id) (*Status, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteQuestion not implemented")
+}
+func (UnimplementedIdsCRUDServer) UpdateSolution(context.Context, *Solution) (*Status, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateSolution not implemented")
+}
+func (UnimplementedIdsCRUDServer) DeleteSolution(context.Context, *Id) (*Status, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteSolution not implemented")
 }
 func (UnimplementedIdsCRUDServer) mustEmbedUnimplementedIdsCRUDServer() {}
 
@@ -152,6 +208,78 @@ func _IdsCRUD_CreateSolution_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _IdsCRUD_UpdateQuestion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Question)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IdsCRUDServer).UpdateQuestion(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ids_proto.idsCRUD/UpdateQuestion",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IdsCRUDServer).UpdateQuestion(ctx, req.(*Question))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _IdsCRUD_DeleteQuestion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IdsCRUDServer).DeleteQuestion(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ids_proto.idsCRUD/DeleteQuestion",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IdsCRUDServer).DeleteQuestion(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _IdsCRUD_UpdateSolution_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Solution)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IdsCRUDServer).UpdateSolution(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ids_proto.idsCRUD/UpdateSolution",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IdsCRUDServer).UpdateSolution(ctx, req.(*Solution))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _IdsCRUD_DeleteSolution_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IdsCRUDServer).DeleteSolution(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ids_proto.idsCRUD/DeleteSolution",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IdsCRUDServer).DeleteSolution(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // IdsCRUD_ServiceDesc is the grpc.ServiceDesc for IdsCRUD service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,6 +298,22 @@ var IdsCRUD_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateSolution",
 			Handler:    _IdsCRUD_CreateSolution_Handler,
+		},
+		{
+			MethodName: "UpdateQuestion",
+			Handler:    _IdsCRUD_UpdateQuestion_Handler,
+		},
+		{
+			MethodName: "DeleteQuestion",
+			Handler:    _IdsCRUD_DeleteQuestion_Handler,
+		},
+		{
+			MethodName: "UpdateSolution",
+			Handler:    _IdsCRUD_UpdateSolution_Handler,
+		},
+		{
+			MethodName: "DeleteSolution",
+			Handler:    _IdsCRUD_DeleteSolution_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

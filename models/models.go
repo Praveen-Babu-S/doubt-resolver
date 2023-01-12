@@ -26,20 +26,20 @@ type Question struct {
 	Topic     string   `json:"topic,omitempty"`
 	Desc      string   `json:"desc,omitempty"`
 	Status    bool     `json:"status,omitempty"`
-	StudentId uint     `json:"student_id,omitempty"`
+	StudentId uint64   `json:"student_id,omitempty"`
 	Solution  Solution `json:"solution,omitempty"`
 }
 
 type Solution struct {
 	gorm.Model
 	Explanation string    `json:"explanation,omitempty"`
-	MentorId    uint      `json:"mentor_id,omitempty"`
-	QuestionID  uint      `json:"question_id,omitempty"`
+	MentorId    uint64    `json:"mentor_id,omitempty"`
+	QuestionID  uint64    `json:"question_id,omitempty"`
 	Comments    []Comment `json:"comments,omitempty"`
 }
 
 type Comment struct {
 	gorm.Model
 	Msg        string `json:"msg,omitempty"`
-	SolutionId uint   `json:"solution_id,omitempty"`
+	SolutionId uint64 `json:"solution_id,omitempty"`
 }
