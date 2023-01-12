@@ -9,8 +9,12 @@ package ids_proto;
 
 service idsCRUD {
     rpc CreateQuestion(Question) returns (Status); //student creates question
-    rpc CreateComment(Comment) returns(Status); //student create comment for the solution
+    rpc CreateComment(Comment) returns(Status); //User create comment for the solution
     rpc CreateSolution(Solution) returns (Status); //mentor creates solution 
+    rpc UpdateQuestion(Question) returns (Status); //student update question
+    rpc DeleteQuestion(Id) returns (Status); //student delete his question
+    rpc UpdateSolution(Solution) returns (Status); //mentor update his solution
+    rpc DeleteSolution(Id) returns (Status); //mentor delete his solution
 }
  
 
@@ -31,5 +35,9 @@ message Question {
 message Solution {
     string explanation=1;
     uint64 mentorid =2;
-    uint64 solutionid =3;
+    uint64 questionid =3;
+}
+
+message Id{
+    int64 id=1;
 }

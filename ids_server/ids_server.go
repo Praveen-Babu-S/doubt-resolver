@@ -36,22 +36,28 @@ func main() {
 }
 
 func (s *idsServer) CreateQuestion(ctx context.Context, in *pb.Question) (*pb.Status, error) {
-	q := models.Question{Desc: in.Desc, Subject: in.Subject, Topic: in.Topic, StudentId: uint(in.Studentid)}
+	q := models.Question{Desc: in.Desc, Subject: in.Subject, Topic: in.Topic, StudentId: in.Studentid}
 	fmt.Println(q)
 	s.db.Create(&q)
+	// fmt.Println(e)
 	res := pb.Status{}
+	// if e != nil {
+	// 	res.Id = "0"
+	// } else {
 	res.Id = "1"
+	// }
 	return &res, nil
 }
 func (s *idsServer) CreateComment(ctx context.Context, in *pb.Comment) (*pb.Status, error) {
-	c := models.Comment{Msg: in.Desc}
+	c := models.Comment{Msg: in.Desc, SolutionId: in.Solutionid}
 	s.db.Create(&c)
 	res := pb.Status{}
 	res.Id = "1"
 	return &res, nil
 }
+
 func (s *idsServer) CreateSolution(ctx context.Context, in *pb.Solution) (*pb.Status, error) {
-	q := models.Solution{Explanation: in.Explanation}
+	q := models.Solution{Explanation: in.Explanation, MentorId: in.Mentorid, QuestionID: in.Questionid}
 	s.db.Create(&q)
 	res := pb.Status{}
 	res.Id = "1"

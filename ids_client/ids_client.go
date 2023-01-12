@@ -20,9 +20,9 @@ func main() {
 	}
 	defer conn.Close()
 	client := pb.NewIdsCRUDClient(conn)
-	runCreateQuestion(client, "Maths", "Calculus", "Question1", 1)
-	// runCreateSolution(client, "Solution1")
-	// runCreateComment(client, "Comment 1")
+	// runCreateQuestion(client, "Science", "asdfg", "Question4", 2)
+	// runCreateSolution(client, "Solution1", 1, 1)
+	runCreateComment(client, "Comment 1", 2)
 }
 
 // create question
@@ -42,10 +42,10 @@ func runCreateQuestion(client pb.IdsCRUDClient, subject string, topic string, de
 }
 
 // create solution
-func runCreateSolution(client pb.IdsCRUDClient, explanation string) {
+func runCreateSolution(client pb.IdsCRUDClient, explanation string, mentor_id uint64, question_id uint64) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	solution := &pb.Solution{Explanation: explanation}
+	solution := &pb.Solution{Explanation: explanation, Mentorid: mentor_id, Questionid: question_id}
 	res, err := client.CreateSolution(ctx, solution)
 	if err != nil {
 		log.Fatalf("Unable to create solution in client %v", err)
@@ -58,10 +58,10 @@ func runCreateSolution(client pb.IdsCRUDClient, explanation string) {
 }
 
 // create comment
-func runCreateComment(client pb.IdsCRUDClient, msg string) {
+func runCreateComment(client pb.IdsCRUDClient, msg string, solution_id uint64) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	comment := &pb.Comment{Desc: msg}
+	comment := &pb.Comment{Desc: msg, Solutionid: solution_id}
 	res, err := client.CreateComment(ctx, comment)
 	if err != nil {
 		log.Fatalf("Unable to create comment in client %v", err)
