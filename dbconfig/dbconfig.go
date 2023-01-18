@@ -3,7 +3,7 @@ package dbconfig
 import (
 	"log"
 
-	models "github.com/backend-ids/models"
+	"github.com/backend-ids/models"
 	"github.com/jinzhu/gorm"
 )
 
@@ -21,78 +21,79 @@ func DBSetup() *gorm.DB {
 func DBstart() *gorm.DB {
 	db := DBSetup()
 
-	//create students table
-	// db.DropTable(&models.Student{})
-	db.CreateTable(&models.Student{})
-
-	//create mentors table
-	// db.DropTable(&models.Mentor{})
-	db.CreateTable(&models.Mentor{})
+	//create users table
+	// db.DropTable(&models.User{})
+	// db.CreateTable(&models.User{})
 
 	//create quenstions table
 	// db.DropTable(&models.Question{})
-	db.CreateTable(&models.Question{})
+	// db.CreateTable(&models.Question{})
 
 	//create solutions table
 	// db.DropTable(&models.Solution{})
-	db.CreateTable(&models.Solution{})
+	// db.CreateTable(&models.Solution{})
 
 	// create comments table
 	// db.DropTable(&models.Comment{})
-	db.CreateTable(&models.Comment{})
+	// db.CreateTable(&models.Comment{})
 
-	//set foreign key for question table (student_id is foreign key here)
-	db.Debug().Model(&models.Question{}).AddForeignKey("student_id", "students(id)", "CASCADE", "CASCADE")
+	// set foreign key for question table (student_id is foreign key here)
+	// db.Debug().Model(&models.Question{}).AddForeignKey("student_id", "users(id)", "CASCADE", "CASCADE")
+	// db.Debug().Model(&models.Question{}).AddForeignKey("assignee_id", "users(id)", "CASCADE", "CASCADE")
 
-	//set foreign key for solution table (mentor_id is foreign key here)
-	db.Debug().Model(&models.Solution{}).AddForeignKey("mentor_id", "mentors(id)", "CASCADE", "CASCADE")
+	// //set foreign key for comments table(user_id is foreign key here)
+	// db.Debug().Model(&models.Comment{}).AddForeignKey("user_id", "users(id)", "CASCADE", "CASCADE")
 
-	//set foreign key for comment table (solution_id is foreign key)
-	db.Debug().Model(&models.Comment{}).AddForeignKey("solution_id", "solutions(id)", "CASCADE", "CASCADE")
+	// //set foreign key for solution table (mentor_id is foreign key here)
+	// db.Debug().Model(&models.Solution{}).AddForeignKey("mentor_id", "users(id)", "CASCADE", "CASCADE")
 
-	//set foreign key for solution table (question_id is foreign key)
-	db.Debug().Model(&models.Solution{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "CASCADE")
+	// //set foreign key for comment table (solution_id is foreign key)
+	// db.Debug().Model(&models.Comment{}).AddForeignKey("solution_id", "solutions(id)", "CASCADE", "CASCADE")
 
-	s := []models.Student{
+	// //set foreign key for solution table (question_id is foreign key)
+	// db.Debug().Model(&models.Solution{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "CASCADE")
+
+	s := []models.User{
 		{
-			Name:  "Praveen",
-			Email: "praveen@gmail.com",
+			Name:  "User 1",
+			Email: "mail 1@gmail.com",
+			Role:  "Student",
 			Questions: []models.Question{
 				{
-					Subject: "Subject 2",
-					Topic:   "Topic 2",
-					Desc:    "Desc 2",
+					Subject: "Subject 1",
+					Desc:    "Desc 1",
 				},
 			},
 		},
 		{
-			Name:  "Rohit",
-			Email: "rohit@gmail.com",
+			Name:  "user 2",
+			Email: "mail@gmail.com",
+			Role:  "Mentor",
 		},
 	}
 	for _, S := range s {
 		db.Create(&S)
 	}
-	m := models.Mentor{
-		Name:    "Mentor 1",
-		Email:   "Email 1",
-		Subject: "Science",
-	}
-	db.Create(&m)
-	q := models.Question{
-		Subject: "Subject 1",
-		Topic:   "Topic 1",
-		Desc:    "Desc 1",
-	}
-	db.Create(&q)
-	s1 := models.Solution{
-		Explanation: "Explanation 1",
-	}
-	db.Create(&s1)
-	c := models.Comment{
-		Msg: "Hey,I need some better explanation here!",
-	}
-	db.Create(&c)
+
+	// q := models.Question{
+	// 	Subject:    "Subject 2",
+	// 	Desc:       "Desc 2",
+	// 	StudentId:  1,
+	// 	AssigneeId: 2,
+	// }
+	// db.Create(&q)
+	// s1 := models.Solution{
+	// 	Desc:       "Explanation 1",
+	// 	QuestionID: 2,
+	// 	MentorId:   2,
+	// }
+	// db.Create(&s1)
+	// c := models.Comment{
+	// 	Msg:        "Hey,I need some better explanation here!",
+	// 	SolutionId: 1,
+	// 	UserId:     1,
+	// }
+	// db.Create(&c)
 
 	return db
 }

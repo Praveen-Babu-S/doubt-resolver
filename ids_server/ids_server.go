@@ -14,11 +14,17 @@ import (
 	"google.golang.org/grpc"
 )
 
-const port = ":3030"
+const port = ":3031"
 
 type idsServer struct {
 	pb.UnimplementedIdsCRUDServer
 	db *gorm.DB
+}
+
+type qById struct {
+	models.Question
+	models.Solution
+	// repeated models.Comment
 }
 
 func main() {
@@ -36,20 +42,24 @@ func main() {
 }
 
 func (s *idsServer) CreateQuestion(ctx context.Context, in *pb.Question) (*pb.Status, error) {
-	q := models.Question{Desc: in.Desc, Subject: in.Subject, Topic: in.Topic, StudentId: in.Studentid}
+	q := models.Question{Desc: in.Desc, Subject: in.Subject, StudentId: in.StudentId, AssigneeId: in.AssigneeId}
 	fmt.Println(q)
 	s.db.Create(&q)
-	// fmt.Println(e)
 	res := pb.Status{}
-	// if e != nil {
-	// 	res.Id = "0"
-	// } else {
 	res.Id = "1"
-	// }
 	return &res, nil
 }
+
+func (s *idsServer) EditQuestion(ctx context.Context, in *pb.Question) (*pb.Status, error) {
+	res := pb.Status{}
+	q := models.Question{Desc: in.Desc, Subject: in.Subject, StudentId: in.StudentId, AssigneeId: in.AssigneeId}
+	s.db.Model(&models.Question{}).Where("id = ?", in.Id).Updates(q)
+	res.Id = "1"
+	return &res, nil
+}
+
 func (s *idsServer) CreateComment(ctx context.Context, in *pb.Comment) (*pb.Status, error) {
-	c := models.Comment{Msg: in.Desc, SolutionId: in.Solutionid}
+	c := models.Comment{Msg: in.Msg, SolutionId: in.SolutionId, UserId: in.UserId}
 	s.db.Create(&c)
 	res := pb.Status{}
 	res.Id = "1"
@@ -57,9 +67,78 @@ func (s *idsServer) CreateComment(ctx context.Context, in *pb.Comment) (*pb.Stat
 }
 
 func (s *idsServer) CreateSolution(ctx context.Context, in *pb.Solution) (*pb.Status, error) {
-	q := models.Solution{Explanation: in.Explanation, MentorId: in.Mentorid, QuestionID: in.Questionid}
+	q := models.Solution{Desc: in.Desc, MentorId: in.MentorId, QuestionID: in.QuestionId}
 	s.db.Create(&q)
 	res := pb.Status{}
 	res.Id = "1"
 	return &res, nil
+}
+
+func (s *idsServer) EditSolution(ctx context.Context, in *pb.Solution) (*pb.Status, error) {
+	res := pb.Status{}
+	q := models.Solution{Desc: in.Desc, MentorId: in.MentorId, QuestionID: in.QuestionId}
+	s.db.Model(&models.Solution{}).Where("id = ?", in.Id).Updates(q)
+	res.Id = "1"
+	return &res, nil
+}
+
+// authorised to student whose student_id matches with id
+func (s *idsServer) GetQuestions(in *pb.Id, stream pb.IdsCRUD_GetQuestionsServer) error {
+	questions := []pb.Question{}
+	s.db.Model(&models.Question{}).Where("student_id = ?", in.Id).Find(&questions)
+	for _, question := range questions {
+		if err := stream.Send(&question); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (s *idsServer) GetQuestionById(ctx context.Context, in *pb.Id) (*pb.QuestionById, error) {
+	Q := models.Question{}
+	S := models.Solution{}
+	C := []models.Comment{}
+	s.db.Model(&models.Question{}).Where("id=?", in.Id).Find(&Q)
+	s.db.Model(&models.Solution{}).Where("question_id=?", in.Id).Find(&S)
+	s.db.Model(&models.Comment{}).Where("solution_id=?", S.ID).Find(&C)
+	// fmt.Println(que, sol, com)
+	c := []*pb.Comment{}
+	for _, comment := range C {
+		c = append(c, &pb.Comment{
+			SolutionId: comment.SolutionId,
+			UserId:     comment.UserId,
+			Msg:        comment.Msg,
+		})
+	}
+	q := &pb.QuestionById{Q: &pb.Question{
+		Subject:    Q.Subject,
+		Desc:       Q.Desc,
+		StudentId:  Q.StudentId,
+		AssigneeId: Q.AssigneeId,
+		Id:         uint64(Q.ID),
+	}, S: &pb.Solution{
+		Desc:       S.Desc,
+		QuestionId: S.QuestionID,
+		MentorId:   S.MentorId,
+		Id:         uint64(S.ID),
+	}, C: c,
+	}
+	return q, nil
+}
+
+func (s *idsServer) FindIDs(ctx context.Context, in *pb.Id) (*pb.Ids, error) {
+	res := &pb.Ids{}
+	q := models.Question{}
+	s.db.Model(&models.Question{}).Where("id=?", in.Id).Find(&q)
+	res.Sid = q.StudentId
+	res.Aid = q.AssigneeId
+	return res, nil
+}
+
+func (s *idsServer) FindQID(ctx context.Context, in *pb.Id) (*pb.Id, error) {
+	res := &pb.Id{}
+	sol := models.Solution{}
+	s.db.Model(&models.Solution{}).Where("id=?", in.Id).Find(&sol)
+	res.Id = sol.QuestionID
+	return res, nil
 }

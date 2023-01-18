@@ -4,40 +4,62 @@ option go_package="github.com/backend-ids";
 
 package ids_proto;
 
-
-//declare the services for the student
-
-service idsCRUD {
-    rpc CreateQuestion(Question) returns (Status); //student creates question
-    rpc CreateComment(Comment) returns(Status); //User create comment for the solution
-    rpc CreateSolution(Solution) returns (Status); //mentor creates solution 
-    rpc UpdateQuestion(Question) returns (Status); //student update question
-    rpc DeleteQuestion(Id) returns (Status); //student delete his question
-    rpc UpdateSolution(Solution) returns (Status); //mentor update his solution
-    rpc DeleteSolution(Id) returns (Status); //mentor delete his solution
+service IdsCRUD {
+    rpc CreateQuestion(Question) returns (Status); //student create question
+    //should be authorised to only user whose assignee_id matches
+    rpc CreateSolution(Solution) returns (Status); //mentor create solution
+    //should be authrosed to only users whose student_id or assignee_id matches
+    rpc CreateComment(Comment) returns (Status); //user create comment
+    //should be authorised to user whose student_id matches
+    rpc EditQuestion(Question) returns (Status); //student edit questionn
+    //should be authorised to user whose student_id matches
+    rpc GetQuestionById(Id) returns (QuestionById); //student can fetch question by its id
+    //should be authorised to mentor whose assignee_id matches with mnentor_id
+    rpc EditSolution(Solution) returns(Status); //mentor can edit   his solution 
+    //should be authorised to student whose student_id matches
+    rpc GetQuestions(Id) returns (stream Question); //student can fetch all his questions
+    rpc FindQID(Id) returns(Id);
+    rpc FindIDs(Id) returns(Ids);
 }
- 
 
-message Comment{
-    uint64 solutionid=2;
-    string desc=1;
-} 
-message Status{
-    string id=1;
-}
 message Question {
-    string subject=1;
-    string topic=2;
-    string desc=3;
-    uint64 studentid=4;
+   string subject=1;
+   string desc=2;
+   uint64 student_id=3;
+   uint64 assignee_id=4;
+   uint64  id=5;
 }
 
 message Solution {
-    string explanation=1;
-    uint64 mentorid =2;
-    uint64 questionid =3;
+   string desc=1;
+   uint64 mentor_id=2;
+   uint64 question_id=3;
+   uint64 id=4;
+}
+
+message Comment {
+    string msg=1;
+    uint64 solution_id=2;
+    uint64 user_id=3;
+
+}
+
+message Status {
+    string id=1;
 }
 
 message Id{
-    int64 id=1;
+    uint64 id=1;
+}
+
+
+message Ids{
+    uint64 sid=1;
+    uint64 aid=2;
+}
+
+message QuestionById{
+    Question Q=1;
+    Solution S=2;
+    repeated Comment C=3;
 }
