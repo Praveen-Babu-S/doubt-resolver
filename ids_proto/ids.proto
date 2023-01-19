@@ -7,7 +7,6 @@ package ids_proto;
 service IdsCRUD {
     //creating an user(student/mentor)
     rpc CreateUser(User) returns (Status);
-
     rpc EditUser(User) returns (Status); //user can edit his profile
     rpc CreateQuestion(Question) returns (Status); //student create question
     //should be authorised to only user whose assignee_id matches
@@ -23,7 +22,7 @@ service IdsCRUD {
     //should be authorised to student whose student_id matches
     rpc GetQuestions(Id) returns (stream Question); //student can fetch all his questions
     rpc FindQID(Id) returns(Id);
-    rpc FindIDs(Id) returns(Ids);
+    rpc FindIDs(Id) returns(Ids);//input:q_id output:s_id,a_id
 }
 
 message Question {
@@ -74,4 +73,5 @@ message User{
     string role=3;
     string subject=4;
     uint64 id=5;
+    string password=6;
 }

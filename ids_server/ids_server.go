@@ -35,8 +35,7 @@ func main() {
 }
 
 func (s *idsServer) CreateUser(ctx context.Context, in *pb.User) (*pb.Status, error) {
-	//If the user is mentor then student name is mandatory. It is handled in front-end
-	u := models.User{Name: in.Name, Email: in.Email, Role: in.Role, Subject: in.Subject}
+	u := models.User{Name: in.Name, Email: in.Email, Password: in.Password, Role: in.Role, Subject: in.Subject}
 	s.db.Create(&u)
 	res := pb.Status{}
 	res.Id = "1"
@@ -44,7 +43,7 @@ func (s *idsServer) CreateUser(ctx context.Context, in *pb.User) (*pb.Status, er
 }
 
 func (s *idsServer) EditUser(ctx context.Context, in *pb.User) (*pb.Status, error) {
-	u := models.User{Name: in.Name, Email: in.Email, Role: in.Role, Subject: in.Subject}
+	u := models.User{Name: in.Name, Email: in.Email, Password: in.Password, Role: in.Role, Subject: in.Subject}
 	s.db.Model(&models.User{}).Where("id = ?", in.Id).Updates(u)
 	res := pb.Status{}
 	res.Id = "1"
@@ -52,8 +51,10 @@ func (s *idsServer) EditUser(ctx context.Context, in *pb.User) (*pb.Status, erro
 }
 
 func (s *idsServer) CreateQuestion(ctx context.Context, in *pb.Question) (*pb.Status, error) {
-	q := models.Question{Desc: in.Desc, Subject: in.Subject, StudentId: in.StudentId, AssigneeId: in.AssigneeId}
-	// fmt.Println(q)
+	q := models.Question{Desc: in.Desc, Subject: in.Subject, StudentId: in.StudentId}
+	u := models.User{}
+	s.db.Raw("SELECT id FROM users WHERE role=? and subject=? ORDER BY RANDOM() LIMIT 1", "mentor", q.Subject).Scan(&u)
+	q.AssigneeId = uint64(u.ID)
 	s.db.Create(&q)
 	res := pb.Status{}
 	res.Id = "1"
