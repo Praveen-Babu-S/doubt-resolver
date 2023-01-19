@@ -23,18 +23,51 @@ func main() {
 	defer conn.Close()
 	client := pb.NewIdsCRUDClient(conn)
 	// runCreateQuestion(client, "Subject-2", "desc 4", 1, 4)
-	// runEditQuestion(client, 10, "Subject-9", "Desc-9", 1, 4)
-	// runCreateSolution(client, "this is solution", 4, 6)
-	// runEditSolution(client, 3, "This is new method", 4, 6)
-	// runCreateComment(client, "some more explanation", 3, 1)
-	// GetQuestions(client, 3)
-	GetQuestionById(client, 5, 4)
+	// runEditQuestion(client, 10, "Subject-91", "Desc-9", 1, 4, 4)
+	// runCreateSolution(client, "this is new solution", 4, 6)
+	// runEditSolution(client, 6, "This is new method", 4, 6)
+	// runCreateComment(client, "commentes", 3, 2)
+	// GetQuestions(client, 1)
+	// GetQuestionById(client, 5, 4)
+	// runCreateUser(client, "User_name__", "email_name__", "mentor_name__", "subject_name__")
+	runUpdateUserDetails(client, 6, "User_name__", "email_name_", "mentor_name_", "subject_name_")
+}
+
+// create man user
+func runCreateUser(client pb.IdsCRUDClient, name string, email string, role string, subject string) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	u := &pb.User{Name: name, Email: email, Role: role, Subject: subject}
+	res, err := client.CreateUser(ctx, u)
+	if err != nil {
+		log.Fatalf("Unable to create user in client %v", err)
+	}
+	if res.Id != "1" {
+		log.Fatalf("Unable to create user in server %v", err)
+	} else {
+		log.Fatalln("Successfully created user!")
+	}
+}
+func runUpdateUserDetails(client pb.IdsCRUDClient, id uint64, name string, email string, role string, subject string) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	u := &pb.User{Id: id, Name: name, Email: email, Role: role, Subject: subject}
+	res, err := client.EditUser(ctx, u)
+	if err != nil {
+		log.Fatalf("Unable to update user in client %v", err)
+	}
+	if res.Id != "1" {
+		log.Fatalf("Unable to update user in server %v", err)
+	} else {
+		log.Fatalln("Successfully updated user!")
+	}
 }
 
 // create question
 func runCreateQuestion(client pb.IdsCRUDClient, subject string, desc string, student_id uint64, assignee_id uint64) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
+	//logic for assigning assignee_id randomly
 	question := &pb.Question{Subject: subject, Desc: desc, StudentId: student_id, AssigneeId: assignee_id}
 	res, err := client.CreateQuestion(ctx, question)
 	if err != nil {
@@ -43,7 +76,7 @@ func runCreateQuestion(client pb.IdsCRUDClient, subject string, desc string, stu
 	if res.Id != "1" {
 		log.Fatalf("Unable to create question in server %v", err)
 	} else {
-		log.Fatalln("Successfully created Question from Client!")
+		log.Fatalln("Successfully created Question!")
 	}
 }
 
@@ -64,7 +97,7 @@ func runEditQuestion(client pb.IdsCRUDClient, id uint64, subject string, desc st
 	if res.Id != "1" {
 		log.Fatalf("Unable to edit question in server %v", err)
 	} else {
-		log.Fatalln("Successfully updated Question from Client!")
+		log.Fatalln("Successfully updated Question!")
 	}
 }
 
@@ -87,7 +120,7 @@ func runCreateSolution(client pb.IdsCRUDClient, explanation string, user_id uint
 	if res.Id != "1" {
 		log.Fatalf("Unable to create solution in server %v", err)
 	} else {
-		log.Fatalln("Successfully created solution from Client!")
+		log.Fatalln("Successfully created solution!")
 	}
 }
 
@@ -109,7 +142,7 @@ func runEditSolution(client pb.IdsCRUDClient, sol_id uint64, explanation string,
 	if res.Id != "1" {
 		log.Fatalf("Unable to edit solution in server %v", err)
 	} else {
-		log.Fatalln("Successfully updated solution from Client!")
+		log.Fatalln("Successfully updated solution!")
 	}
 
 }
@@ -131,7 +164,7 @@ func runCreateComment(client pb.IdsCRUDClient, msg string, solution_id uint64, u
 	if res.Id != "1" {
 		log.Fatalf("Unable to create comment in server %v", err)
 	} else {
-		log.Fatalln("Successfully created comment from Client!")
+		log.Fatalln("Successfully created comment!")
 	}
 }
 
