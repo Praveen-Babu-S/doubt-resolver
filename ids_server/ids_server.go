@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net"
 
@@ -21,12 +20,6 @@ type idsServer struct {
 	db *gorm.DB
 }
 
-type qById struct {
-	models.Question
-	models.Solution
-	// repeated models.Comment
-}
-
 func main() {
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
@@ -41,9 +34,26 @@ func main() {
 	}
 }
 
+func (s *idsServer) CreateUser(ctx context.Context, in *pb.User) (*pb.Status, error) {
+	//If the user is mentor then student name is mandatory. It is handled in front-end
+	u := models.User{Name: in.Name, Email: in.Email, Role: in.Role, Subject: in.Subject}
+	s.db.Create(&u)
+	res := pb.Status{}
+	res.Id = "1"
+	return &res, nil
+}
+
+func (s *idsServer) EditUser(ctx context.Context, in *pb.User) (*pb.Status, error) {
+	u := models.User{Name: in.Name, Email: in.Email, Role: in.Role, Subject: in.Subject}
+	s.db.Model(&models.User{}).Where("id = ?", in.Id).Updates(u)
+	res := pb.Status{}
+	res.Id = "1"
+	return &res, nil
+}
+
 func (s *idsServer) CreateQuestion(ctx context.Context, in *pb.Question) (*pb.Status, error) {
 	q := models.Question{Desc: in.Desc, Subject: in.Subject, StudentId: in.StudentId, AssigneeId: in.AssigneeId}
-	fmt.Println(q)
+	// fmt.Println(q)
 	s.db.Create(&q)
 	res := pb.Status{}
 	res.Id = "1"

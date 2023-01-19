@@ -5,6 +5,10 @@ option go_package="github.com/backend-ids";
 package ids_proto;
 
 service IdsCRUD {
+    //creating an user(student/mentor)
+    rpc CreateUser(User) returns (Status);
+
+    rpc EditUser(User) returns (Status); //user can edit his profile
     rpc CreateQuestion(Question) returns (Status); //student create question
     //should be authorised to only user whose assignee_id matches
     rpc CreateSolution(Solution) returns (Status); //mentor create solution
@@ -62,4 +66,12 @@ message QuestionById{
     Question Q=1;
     Solution S=2;
     repeated Comment C=3;
+}
+
+message User{
+    string name=1;
+    string email=2;
+    string role=3;
+    string subject=4;
+    uint64 id=5;
 }

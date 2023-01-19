@@ -22,6 +22,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type IdsCRUDClient interface {
+	// creating an user(student/mentor)
+	CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error)
+	EditUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error)
 	CreateQuestion(ctx context.Context, in *Question, opts ...grpc.CallOption) (*Status, error)
 	// should be authorised to only user whose assignee_id matches
 	CreateSolution(ctx context.Context, in *Solution, opts ...grpc.CallOption) (*Status, error)
@@ -45,6 +48,24 @@ type idsCRUDClient struct {
 
 func NewIdsCRUDClient(cc grpc.ClientConnInterface) IdsCRUDClient {
 	return &idsCRUDClient{cc}
+}
+
+func (c *idsCRUDClient) CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error) {
+	out := new(Status)
+	err := c.cc.Invoke(ctx, "/ids_proto.IdsCRUD/CreateUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *idsCRUDClient) EditUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error) {
+	out := new(Status)
+	err := c.cc.Invoke(ctx, "/ids_proto.IdsCRUD/EditUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *idsCRUDClient) CreateQuestion(ctx context.Context, in *Question, opts ...grpc.CallOption) (*Status, error) {
@@ -155,6 +176,9 @@ func (c *idsCRUDClient) FindIDs(ctx context.Context, in *Id, opts ...grpc.CallOp
 // All implementations must embed UnimplementedIdsCRUDServer
 // for forward compatibility
 type IdsCRUDServer interface {
+	// creating an user(student/mentor)
+	CreateUser(context.Context, *User) (*Status, error)
+	EditUser(context.Context, *User) (*Status, error)
 	CreateQuestion(context.Context, *Question) (*Status, error)
 	// should be authorised to only user whose assignee_id matches
 	CreateSolution(context.Context, *Solution) (*Status, error)
@@ -177,6 +201,12 @@ type IdsCRUDServer interface {
 type UnimplementedIdsCRUDServer struct {
 }
 
+func (UnimplementedIdsCRUDServer) CreateUser(context.Context, *User) (*Status, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
+}
+func (UnimplementedIdsCRUDServer) EditUser(context.Context, *User) (*Status, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditUser not implemented")
+}
 func (UnimplementedIdsCRUDServer) CreateQuestion(context.Context, *Question) (*Status, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateQuestion not implemented")
 }
@@ -215,6 +245,42 @@ type UnsafeIdsCRUDServer interface {
 
 func RegisterIdsCRUDServer(s grpc.ServiceRegistrar, srv IdsCRUDServer) {
 	s.RegisterService(&IdsCRUD_ServiceDesc, srv)
+}
+
+func _IdsCRUD_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(User)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IdsCRUDServer).CreateUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ids_proto.IdsCRUD/CreateUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IdsCRUDServer).CreateUser(ctx, req.(*User))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _IdsCRUD_EditUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(User)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IdsCRUDServer).EditUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ids_proto.IdsCRUD/EditUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IdsCRUDServer).EditUser(ctx, req.(*User))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _IdsCRUD_CreateQuestion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -389,6 +455,14 @@ var IdsCRUD_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "ids_proto.IdsCRUD",
 	HandlerType: (*IdsCRUDServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateUser",
+			Handler:    _IdsCRUD_CreateUser_Handler,
+		},
+		{
+			MethodName: "EditUser",
+			Handler:    _IdsCRUD_EditUser_Handler,
+		},
 		{
 			MethodName: "CreateQuestion",
 			Handler:    _IdsCRUD_CreateQuestion_Handler,
