@@ -3,7 +3,6 @@ package dbconfig
 import (
 	"log"
 
-	"github.com/backend-ids/models"
 	"github.com/jinzhu/gorm"
 )
 
@@ -53,27 +52,27 @@ func DBstart() *gorm.DB {
 	// //set foreign key for solution table (question_id is foreign key)
 	// db.Debug().Model(&models.Solution{}).AddForeignKey("question_id", "questions(id)", "CASCADE", "CASCADE")
 
-	s := []models.User{
-		{
-			Name:  "User 1",
-			Email: "mail 1@gmail.com",
-			Role:  "Student",
-			Questions: []models.Question{
-				{
-					Subject: "Subject 1",
-					Desc:    "Desc 1",
-				},
-			},
-		},
-		{
-			Name:  "user 2",
-			Email: "mail@gmail.com",
-			Role:  "Mentor",
-		},
-	}
-	for _, S := range s {
-		db.Create(&S)
-	}
+	// s := []models.User{
+	// 	{
+	// 		Name:  "User 1",
+	// 		Email: "mail 1@gmail.com",
+	// 		Role:  "Student",
+	// 		Questions: []models.Question{
+	// 			{
+	// 				Subject: "Subject 1",
+	// 				Desc:    "Desc 1",
+	// 			},
+	// 		},
+	// 	},
+	// 	{
+	// 		Name:  "user 2",
+	// 		Email: "mail@gmail.com",
+	// 		Role:  "Mentor",
+	// 	},
+	// }
+	// for _, S := range s {
+	// 	db.Create(&S)
+	// }
 
 	// q := models.Question{
 	// 	Subject:    "Subject 2",

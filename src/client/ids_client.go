@@ -7,7 +7,7 @@ import (
 	"log"
 	"time"
 
-	pb "github.com/backend-ids/ids_proto"
+	pb "github.com/backend-ids/src/proto"
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -22,22 +22,22 @@ func main() {
 	}
 	defer conn.Close()
 	client := pb.NewIdsCRUDClient(conn)
-	// runCreateQuestion(client, "Subject-2", "desc 4", 1, 4)
-	// runEditQuestion(client, 10, "Subject-91", "Desc-9", 1, 4, 4)
-	// runCreateSolution(client, "this is new solution", 4, 6)
-	// runEditSolution(client, 6, "This is new method", 4, 6)
-	// runCreateComment(client, "commentes", 3, 2)
+	runCreateQuestion(client, "subject-1", "problem description", 5)
+	// runEditQuestion(client, 1, "subject-1", "edited description", 1, 2, 1)
+	// runCreateSolution(client, "slution 3", 3, 3)
+	// runEditSolution(client, 2, "another approach", 2, 3)
+	// runCreateComment(client, "ok will do", 1, 3)
 	// GetQuestions(client, 1)
-	// GetQuestionById(client, 5, 4)
-	// runCreateUser(client, "User_name__", "email_name__", "mentor_name__", "subject_name__")
-	runUpdateUserDetails(client, 6, "User_name__", "email_name_", "mentor_name_", "subject_name_")
+	// GetQuestionById(client, 1, 2)
+	// runCreateUser(client, "user-5", "email-5@email.com", "asdqw#$f123@G", "mentor", "")
+	// runUpdateUserDetails(client, 5, "user-1", "email-1@email.com", "123456", "mentor", "subject-1")
 }
 
 // create man user
-func runCreateUser(client pb.IdsCRUDClient, name string, email string, role string, subject string) {
+func runCreateUser(client pb.IdsCRUDClient, name string, email string, password string, role string, subject string) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	u := &pb.User{Name: name, Email: email, Role: role, Subject: subject}
+	u := &pb.User{Name: name, Email: email, Password: password, Role: role, Subject: subject}
 	res, err := client.CreateUser(ctx, u)
 	if err != nil {
 		log.Fatalf("Unable to create user in client %v", err)
@@ -48,10 +48,10 @@ func runCreateUser(client pb.IdsCRUDClient, name string, email string, role stri
 		log.Fatalln("Successfully created user!")
 	}
 }
-func runUpdateUserDetails(client pb.IdsCRUDClient, id uint64, name string, email string, role string, subject string) {
+func runUpdateUserDetails(client pb.IdsCRUDClient, id uint64, name string, email string, password string, role string, subject string) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	u := &pb.User{Id: id, Name: name, Email: email, Role: role, Subject: subject}
+	u := &pb.User{Id: id, Name: name, Email: email, Password: password, Role: role, Subject: subject}
 	res, err := client.EditUser(ctx, u)
 	if err != nil {
 		log.Fatalf("Unable to update user in client %v", err)
@@ -64,11 +64,10 @@ func runUpdateUserDetails(client pb.IdsCRUDClient, id uint64, name string, email
 }
 
 // create question
-func runCreateQuestion(client pb.IdsCRUDClient, subject string, desc string, student_id uint64, assignee_id uint64) {
+func runCreateQuestion(client pb.IdsCRUDClient, subject string, desc string, student_id uint64) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	//logic for assigning assignee_id randomly
-	question := &pb.Question{Subject: subject, Desc: desc, StudentId: student_id, AssigneeId: assignee_id}
+	question := &pb.Question{Subject: subject, Desc: desc, StudentId: student_id}
 	res, err := client.CreateQuestion(ctx, question)
 	if err != nil {
 		log.Fatalf("Unable to create question in client %v", err)
@@ -131,7 +130,7 @@ func runEditSolution(client pb.IdsCRUDClient, sol_id uint64, explanation string,
 	//authorisation(only mentor who got assigned this question can edit)
 	ids, _ := client.FindIDs(ctx, &pb.Id{Id: question_id})
 	if user_id != ids.Aid {
-		log.Fatalln("Not Authorised to create solution!")
+		log.Fatalln("Not Authorised to edit solution!")
 		return
 	}
 	solution := &pb.Solution{Id: sol_id, Desc: explanation, QuestionId: question_id, MentorId: user_id}
