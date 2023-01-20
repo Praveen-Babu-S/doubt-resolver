@@ -2,7 +2,7 @@ syntax="proto3";
 
 option go_package="github.com/backend-ids";
 
-package ids_proto;
+package proto;
 
 service IdsCRUD {
     //creating an user(student/mentor)

@@ -9,7 +9,7 @@ type User struct {
 	gorm.Model
 	Name      string     `json:"name,omitempty"`
 	Email     string     `json:"email,omitempty"`
-	Password  string     `json:password,omitmpty"`
+	Password  string     `json:"password,omitempty"`
 	Role      string     `json:"role,omitempty" gorm:"not null"`
 	Subject   string     `json:"subject,omitempty"`
 	Questions []Question `json:"questions,omitempty"`

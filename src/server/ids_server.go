@@ -2,12 +2,13 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 
-	"github.com/backend-ids/dbconfig"
-	pb "github.com/backend-ids/ids_proto"
-	"github.com/backend-ids/models"
+	"github.com/backend-ids/src/dbconfig"
+	"github.com/backend-ids/src/models"
+	pb "github.com/backend-ids/src/proto"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
@@ -20,12 +21,32 @@ type idsServer struct {
 	db *gorm.DB
 }
 
+func unaryInterceptor(ctx context.Context,
+	req interface{},
+	info *grpc.UnaryServerInfo,
+	handler grpc.UnaryHandler) (
+	interface{}, error) {
+	fmt.Println("unary interceptor", info.FullMethod)
+	return handler(ctx, req)
+}
+func streamInterceptor(
+	srv interface{},
+	stream grpc.ServerStream,
+	info *grpc.StreamServerInfo,
+	handler grpc.StreamHandler) error {
+	fmt.Println("Stream Interceptor", info.FullMethod)
+	return handler(srv, stream)
+}
+
 func main() {
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listes: %v", err)
 	}
-	s := grpc.NewServer()
+	s := grpc.NewServer(
+		grpc.UnaryInterceptor(unaryInterceptor),
+		grpc.StreamInterceptor(streamInterceptor),
+	)
 
 	pb.RegisterIdsCRUDServer(s, &idsServer{db: dbconfig.DBSetup()})
 	log.Printf("server is listening at %v", lis.Addr())
@@ -137,6 +158,7 @@ func (s *idsServer) GetQuestionById(ctx context.Context, in *pb.Id) (*pb.Questio
 	return q, nil
 }
 
+// takes q_id and returns student_id and mentor_id
 func (s *idsServer) FindIDs(ctx context.Context, in *pb.Id) (*pb.Ids, error) {
 	res := &pb.Ids{}
 	q := models.Question{}
@@ -146,6 +168,7 @@ func (s *idsServer) FindIDs(ctx context.Context, in *pb.Id) (*pb.Ids, error) {
 	return res, nil
 }
 
+// takes solution_id returns question_id
 func (s *idsServer) FindQID(ctx context.Context, in *pb.Id) (*pb.Id, error) {
 	res := &pb.Id{}
 	sol := models.Solution{}

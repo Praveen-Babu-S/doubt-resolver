@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.12.4
-// source: ids_proto/ids.proto
+// source: src/proto/ids.proto
 
 package backend_ids
 
@@ -52,7 +52,7 @@ func NewIdsCRUDClient(cc grpc.ClientConnInterface) IdsCRUDClient {
 
 func (c *idsCRUDClient) CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error) {
 	out := new(Status)
-	err := c.cc.Invoke(ctx, "/ids_proto.IdsCRUD/CreateUser", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.IdsCRUD/CreateUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func (c *idsCRUDClient) CreateUser(ctx context.Context, in *User, opts ...grpc.C
 
 func (c *idsCRUDClient) EditUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error) {
 	out := new(Status)
-	err := c.cc.Invoke(ctx, "/ids_proto.IdsCRUD/EditUser", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.IdsCRUD/EditUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +70,7 @@ func (c *idsCRUDClient) EditUser(ctx context.Context, in *User, opts ...grpc.Cal
 
 func (c *idsCRUDClient) CreateQuestion(ctx context.Context, in *Question, opts ...grpc.CallOption) (*Status, error) {
 	out := new(Status)
-	err := c.cc.Invoke(ctx, "/ids_proto.IdsCRUD/CreateQuestion", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.IdsCRUD/CreateQuestion", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func (c *idsCRUDClient) CreateQuestion(ctx context.Context, in *Question, opts .
 
 func (c *idsCRUDClient) CreateSolution(ctx context.Context, in *Solution, opts ...grpc.CallOption) (*Status, error) {
 	out := new(Status)
-	err := c.cc.Invoke(ctx, "/ids_proto.IdsCRUD/CreateSolution", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.IdsCRUD/CreateSolution", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +88,7 @@ func (c *idsCRUDClient) CreateSolution(ctx context.Context, in *Solution, opts .
 
 func (c *idsCRUDClient) CreateComment(ctx context.Context, in *Comment, opts ...grpc.CallOption) (*Status, error) {
 	out := new(Status)
-	err := c.cc.Invoke(ctx, "/ids_proto.IdsCRUD/CreateComment", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.IdsCRUD/CreateComment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +97,7 @@ func (c *idsCRUDClient) CreateComment(ctx context.Context, in *Comment, opts ...
 
 func (c *idsCRUDClient) EditQuestion(ctx context.Context, in *Question, opts ...grpc.CallOption) (*Status, error) {
 	out := new(Status)
-	err := c.cc.Invoke(ctx, "/ids_proto.IdsCRUD/EditQuestion", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.IdsCRUD/EditQuestion", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +106,7 @@ func (c *idsCRUDClient) EditQuestion(ctx context.Context, in *Question, opts ...
 
 func (c *idsCRUDClient) GetQuestionById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*QuestionById, error) {
 	out := new(QuestionById)
-	err := c.cc.Invoke(ctx, "/ids_proto.IdsCRUD/GetQuestionById", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.IdsCRUD/GetQuestionById", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +115,7 @@ func (c *idsCRUDClient) GetQuestionById(ctx context.Context, in *Id, opts ...grp
 
 func (c *idsCRUDClient) EditSolution(ctx context.Context, in *Solution, opts ...grpc.CallOption) (*Status, error) {
 	out := new(Status)
-	err := c.cc.Invoke(ctx, "/ids_proto.IdsCRUD/EditSolution", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.IdsCRUD/EditSolution", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -123,7 +123,7 @@ func (c *idsCRUDClient) EditSolution(ctx context.Context, in *Solution, opts ...
 }
 
 func (c *idsCRUDClient) GetQuestions(ctx context.Context, in *Id, opts ...grpc.CallOption) (IdsCRUD_GetQuestionsClient, error) {
-	stream, err := c.cc.NewStream(ctx, &IdsCRUD_ServiceDesc.Streams[0], "/ids_proto.IdsCRUD/GetQuestions", opts...)
+	stream, err := c.cc.NewStream(ctx, &IdsCRUD_ServiceDesc.Streams[0], "/proto.IdsCRUD/GetQuestions", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -156,7 +156,7 @@ func (x *idsCRUDGetQuestionsClient) Recv() (*Question, error) {
 
 func (c *idsCRUDClient) FindQID(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Id, error) {
 	out := new(Id)
-	err := c.cc.Invoke(ctx, "/ids_proto.IdsCRUD/FindQID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.IdsCRUD/FindQID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -165,7 +165,7 @@ func (c *idsCRUDClient) FindQID(ctx context.Context, in *Id, opts ...grpc.CallOp
 
 func (c *idsCRUDClient) FindIDs(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Ids, error) {
 	out := new(Ids)
-	err := c.cc.Invoke(ctx, "/ids_proto.IdsCRUD/FindIDs", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.IdsCRUD/FindIDs", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -257,7 +257,7 @@ func _IdsCRUD_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ids_proto.IdsCRUD/CreateUser",
+		FullMethod: "/proto.IdsCRUD/CreateUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(IdsCRUDServer).CreateUser(ctx, req.(*User))
@@ -275,7 +275,7 @@ func _IdsCRUD_EditUser_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ids_proto.IdsCRUD/EditUser",
+		FullMethod: "/proto.IdsCRUD/EditUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(IdsCRUDServer).EditUser(ctx, req.(*User))
@@ -293,7 +293,7 @@ func _IdsCRUD_CreateQuestion_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ids_proto.IdsCRUD/CreateQuestion",
+		FullMethod: "/proto.IdsCRUD/CreateQuestion",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(IdsCRUDServer).CreateQuestion(ctx, req.(*Question))
@@ -311,7 +311,7 @@ func _IdsCRUD_CreateSolution_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ids_proto.IdsCRUD/CreateSolution",
+		FullMethod: "/proto.IdsCRUD/CreateSolution",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(IdsCRUDServer).CreateSolution(ctx, req.(*Solution))
@@ -329,7 +329,7 @@ func _IdsCRUD_CreateComment_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ids_proto.IdsCRUD/CreateComment",
+		FullMethod: "/proto.IdsCRUD/CreateComment",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(IdsCRUDServer).CreateComment(ctx, req.(*Comment))
@@ -347,7 +347,7 @@ func _IdsCRUD_EditQuestion_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ids_proto.IdsCRUD/EditQuestion",
+		FullMethod: "/proto.IdsCRUD/EditQuestion",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(IdsCRUDServer).EditQuestion(ctx, req.(*Question))
@@ -365,7 +365,7 @@ func _IdsCRUD_GetQuestionById_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ids_proto.IdsCRUD/GetQuestionById",
+		FullMethod: "/proto.IdsCRUD/GetQuestionById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(IdsCRUDServer).GetQuestionById(ctx, req.(*Id))
@@ -383,7 +383,7 @@ func _IdsCRUD_EditSolution_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ids_proto.IdsCRUD/EditSolution",
+		FullMethod: "/proto.IdsCRUD/EditSolution",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(IdsCRUDServer).EditSolution(ctx, req.(*Solution))
@@ -422,7 +422,7 @@ func _IdsCRUD_FindQID_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ids_proto.IdsCRUD/FindQID",
+		FullMethod: "/proto.IdsCRUD/FindQID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(IdsCRUDServer).FindQID(ctx, req.(*Id))
@@ -440,7 +440,7 @@ func _IdsCRUD_FindIDs_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ids_proto.IdsCRUD/FindIDs",
+		FullMethod: "/proto.IdsCRUD/FindIDs",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(IdsCRUDServer).FindIDs(ctx, req.(*Id))
@@ -452,7 +452,7 @@ func _IdsCRUD_FindIDs_Handler(srv interface{}, ctx context.Context, dec func(int
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var IdsCRUD_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "ids_proto.IdsCRUD",
+	ServiceName: "proto.IdsCRUD",
 	HandlerType: (*IdsCRUDServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -503,5 +503,5 @@ var IdsCRUD_ServiceDesc = grpc.ServiceDesc{
 			ServerStreams: true,
 		},
 	},
-	Metadata: "ids_proto/ids.proto",
+	Metadata: "src/proto/ids.proto",
 }
