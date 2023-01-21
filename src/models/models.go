@@ -10,7 +10,7 @@ type User struct {
 	Name      string     `json:"name,omitempty"`
 	Email     string     `json:"email,omitempty"`
 	Password  string     `json:"password,omitempty"`
-	Role      string     `json:"role,omitempty" gorm:"not null"`
+	Role      string     `json:"role,omitempty"`
 	Subject   string     `json:"subject,omitempty"`
 	Questions []Question `json:"questions,omitempty"`
 	Solutions []Solution `json:"solutions,omitempty"`

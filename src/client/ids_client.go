@@ -1,4 +1,4 @@
-package main
+package client
 
 import (
 	"context"
@@ -9,32 +9,10 @@ import (
 
 	pb "github.com/backend-ids/src/proto"
 	_ "github.com/lib/pq"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
-const port = ":3031"
-
-func main() {
-	conn, err := grpc.Dial("localhost"+port, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.Fatalf("Did not connect: %v", err)
-	}
-	defer conn.Close()
-	client := pb.NewIdsCRUDClient(conn)
-	runCreateQuestion(client, "subject-1", "problem description", 5)
-	// runEditQuestion(client, 1, "subject-1", "edited description", 1, 2, 1)
-	// runCreateSolution(client, "slution 3", 3, 3)
-	// runEditSolution(client, 2, "another approach", 2, 3)
-	// runCreateComment(client, "ok will do", 1, 3)
-	// GetQuestions(client, 1)
-	// GetQuestionById(client, 1, 2)
-	// runCreateUser(client, "user-5", "email-5@email.com", "asdqw#$f123@G", "mentor", "")
-	// runUpdateUserDetails(client, 5, "user-1", "email-1@email.com", "123456", "mentor", "subject-1")
-}
-
-// create man user
-func runCreateUser(client pb.IdsCRUDClient, name string, email string, password string, role string, subject string) {
+// create an user
+func CreateUser(client pb.IdsCRUDClient, name string, email string, password string, role string, subject string) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	u := &pb.User{Name: name, Email: email, Password: password, Role: role, Subject: subject}
@@ -48,7 +26,7 @@ func runCreateUser(client pb.IdsCRUDClient, name string, email string, password 
 		log.Fatalln("Successfully created user!")
 	}
 }
-func runUpdateUserDetails(client pb.IdsCRUDClient, id uint64, name string, email string, password string, role string, subject string) {
+func UpdateUserDetails(client pb.IdsCRUDClient, id uint64, name string, email string, password string, role string, subject string) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	u := &pb.User{Id: id, Name: name, Email: email, Password: password, Role: role, Subject: subject}
@@ -64,7 +42,7 @@ func runUpdateUserDetails(client pb.IdsCRUDClient, id uint64, name string, email
 }
 
 // create question
-func runCreateQuestion(client pb.IdsCRUDClient, subject string, desc string, student_id uint64) {
+func CreateQuestion(client pb.IdsCRUDClient, subject string, desc string, student_id uint64) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	question := &pb.Question{Subject: subject, Desc: desc, StudentId: student_id}
@@ -80,7 +58,7 @@ func runCreateQuestion(client pb.IdsCRUDClient, subject string, desc string, stu
 }
 
 // update question
-func runEditQuestion(client pb.IdsCRUDClient, id uint64, subject string, desc string, student_id uint64, assignee_id uint64, user_id uint64) {
+func EditQuestion(client pb.IdsCRUDClient, id uint64, subject string, desc string, student_id uint64, assignee_id uint64, user_id uint64) {
 	//authorisation(only student who created question can edit)
 	if user_id != student_id {
 		log.Fatalln("Not Authorised to edit question!")
@@ -101,7 +79,7 @@ func runEditQuestion(client pb.IdsCRUDClient, id uint64, subject string, desc st
 }
 
 // create solution
-func runCreateSolution(client pb.IdsCRUDClient, explanation string, user_id uint64, question_id uint64) {
+func CreateSolution(client pb.IdsCRUDClient, explanation string, user_id uint64, question_id uint64) {
 	//authorisation(only mentor who got assigned this question can create)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
@@ -124,7 +102,7 @@ func runCreateSolution(client pb.IdsCRUDClient, explanation string, user_id uint
 }
 
 // update Solution
-func runEditSolution(client pb.IdsCRUDClient, sol_id uint64, explanation string, user_id uint64, question_id uint64) {
+func EditSolution(client pb.IdsCRUDClient, sol_id uint64, explanation string, user_id uint64, question_id uint64) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	//authorisation(only mentor who got assigned this question can edit)
@@ -147,7 +125,7 @@ func runEditSolution(client pb.IdsCRUDClient, sol_id uint64, explanation string,
 }
 
 // create comment
-func runCreateComment(client pb.IdsCRUDClient, msg string, solution_id uint64, user_id uint64) {
+func CreateComment(client pb.IdsCRUDClient, msg string, solution_id uint64, user_id uint64) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	q_id, _ := client.FindQID(ctx, &pb.Id{Id: solution_id})
