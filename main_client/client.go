@@ -62,8 +62,8 @@ func main() {
 	// ids_client.CreateSolution(client1, "slution 3", 3, 3)
 	// ids_client.EditSolution(client1, 2, "another approach", 2, 3)
 	// ids_client.CreateComment(client1, "ok will do", 1, 3)
-	ids_client.GetQuestions(client1, 4)
-	// ids_client.GetQuestionById(client1, 3, 4)
+	// ids_client.GetQuestions(client1, 1)
+	ids_client.GetQuestionById(client1, 3, 4)
 	// ids_client.CreateUser(client1, "user-6", "email-6@email.com", "123456", "student", "")
 	// ids_client.UpdateUserDetails(client1, 5, "user-5", "email-5@email.com", "123123", "mentor", "")
 }
