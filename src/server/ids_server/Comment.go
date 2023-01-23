@@ -9,9 +9,9 @@ import (
 )
 
 // create new comment
-func (s *IdsServer) CreateComment(ctx context.Context, in *pb.Comment) (*pb.Status, error) {
+func (s *IdsDbServer) CreateComment(ctx context.Context, in *pb.Comment) (*pb.Status, error) {
 	c := models.Comment{Msg: in.Msg, SolutionId: in.SolutionId, UserId: in.UserId}
-	s.db.Create(&c)
+	s.Db.CreateComment(&c)
 	res := pb.Status{}
 	res.Id = "1"
 	return &res, nil

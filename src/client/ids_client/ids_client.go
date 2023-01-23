@@ -18,7 +18,7 @@ func GetQuestions(client pb.IdsCRUDClient, user_id uint64) {
 	Id := &pb.Id{Id: user_id}
 	stream, err := client.GetQuestions(ctx, Id)
 	if err != nil {
-		log.Fatalf("%v.GetEmps(_)=_,%v", client, err)
+		log.Fatalf("%v.GetQuestions(_)=_,%v", client, err)
 	}
 	for {
 		row, err := stream.Recv()
@@ -26,9 +26,9 @@ func GetQuestions(client pb.IdsCRUDClient, user_id uint64) {
 			break
 		}
 		if err != nil {
-			log.Fatalf("%v.GetEmps(_)=_,%v", client, err)
+			log.Fatalf("%v.GetQuestions(_)=_,%v", client, err)
 		}
-		log.Printf("EmpInfo:%v", row)
+		log.Printf("Question:%v", row)
 	}
 }
 

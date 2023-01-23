@@ -2,6 +2,7 @@ package client
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
 
@@ -16,6 +17,7 @@ func CreateQuestion(client pb.IdsCRUDClient, subject string, desc string, studen
 	question := &pb.Question{Subject: subject, Desc: desc, StudentId: student_id}
 	res, err := client.CreateQuestion(ctx, question)
 	if err != nil {
+		fmt.Println("err", err)
 		log.Fatalf("Unable to create question in client %v", err)
 	}
 	if res.Id != "1" {
