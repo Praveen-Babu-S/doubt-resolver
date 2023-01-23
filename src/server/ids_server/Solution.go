@@ -9,19 +9,19 @@ import (
 )
 
 // create new solution
-func (s *IdsServer) CreateSolution(ctx context.Context, in *pb.Solution) (*pb.Status, error) {
+func (s *IdsDbServer) CreateSolution(ctx context.Context, in *pb.Solution) (*pb.Status, error) {
 	sol := models.Solution{Desc: in.Desc, MentorId: in.MentorId, QuestionID: in.QuestionId}
-	s.db.Create(&sol)
+	s.Db.CreateSolution(&sol)
 	res := pb.Status{}
 	res.Id = "1"
 	return &res, nil
 }
 
 // edit solution
-func (s *IdsServer) EditSolution(ctx context.Context, in *pb.Solution) (*pb.Status, error) {
+func (s *IdsDbServer) EditSolution(ctx context.Context, in *pb.Solution) (*pb.Status, error) {
 	res := pb.Status{}
 	sol := models.Solution{Desc: in.Desc, MentorId: in.MentorId, QuestionID: in.QuestionId}
-	s.db.Model(&models.Solution{}).Where("id = ?", in.Id).Updates(sol)
+	s.Db.EditSolution(&sol, in.Id)
 	res.Id = "1"
 	return &res, nil
 }

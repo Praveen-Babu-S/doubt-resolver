@@ -44,7 +44,7 @@ func main() {
 	}
 	jwtManager := auth.NewJWTManager(secretKey, tokenDuration)
 	authServer := auth_server.NewAuthServer(jwtManager, dbconfig.DBSetup())
-	idsServer := ids_server.NewIdsServer(dbconfig.DBSetup())
+	idsDbServer := ids_server.NewIdsDbserver(dbconfig.DBSetup())
 	interceptor := auth.NewAuthInterceptor(jwtManager, accessibleRoles())
 	s := grpc.NewServer(
 		grpc.UnaryInterceptor(interceptor.Unary()),
@@ -52,7 +52,7 @@ func main() {
 	)
 
 	pb.RegisterAuthServiceServer(s, authServer)
-	pb.RegisterIdsCRUDServer(s, idsServer)
+	pb.RegisterIdsCRUDServer(s, idsDbServer)
 
 	log.Printf("server is listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
