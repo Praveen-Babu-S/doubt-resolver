@@ -8,10 +8,13 @@ import (
 	auth "github.com/backend-ids/authentication"
 	"github.com/backend-ids/src/dbconfig"
 	pb "github.com/backend-ids/src/proto"
-	server "github.com/backend-ids/src/server"
+	auth_server "github.com/backend-ids/src/server/auth_server"
+	ids_server "github.com/backend-ids/src/server/ids_server"
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 )
+
+// /home/praveenbabu/Desktop/backend-ids/src/server/ids_server
 
 const port = ":3031"
 
@@ -34,15 +37,14 @@ func accessibleRoles() map[string][]string {
 		idsServerPath + "GetQuestions":    {"student"},
 	}
 }
-
 func main() {
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	jwtManager := auth.NewJWTManager(secretKey, tokenDuration)
-	authServer := server.NewAuthServer(jwtManager, dbconfig.DBSetup())
-	idsServer := server.NewIdsServer(dbconfig.DBSetup())
+	authServer := auth_server.NewAuthServer(jwtManager, dbconfig.DBSetup())
+	idsServer := ids_server.NewIdsServer(dbconfig.DBSetup())
 	interceptor := auth.NewAuthInterceptor(jwtManager, accessibleRoles())
 	s := grpc.NewServer(
 		grpc.UnaryInterceptor(interceptor.Unary()),

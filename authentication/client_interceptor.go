@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	client "github.com/backend-ids/src/client"
+	client "github.com/backend-ids/src/client/auth_client"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 )

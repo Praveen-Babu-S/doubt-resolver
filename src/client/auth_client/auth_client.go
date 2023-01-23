@@ -19,6 +19,8 @@ func NewAuthClient(cc *grpc.ClientConn, username string, password string) *AuthC
 	service := pb.NewAuthServiceClient(cc)
 	return &AuthClient{service, username, password}
 }
+
+// method returns JWT token
 func (client *AuthClient) Login() (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -35,13 +37,3 @@ func (client *AuthClient) Login() (string, error) {
 
 	return res.GetAccessToken(), nil
 }
-
-// func Login(client pb.AuthServiceClient, username string, password string) {
-// 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-// 	defer cancel()
-// 	token, err := client.Login(ctx, &pb.LoginRequest{Name: username, Password: password})
-// 	if err != nil {
-// 		log.Fatalln(err.Error())
-// 	}
-// 	fmt.Println(token)
-// }
