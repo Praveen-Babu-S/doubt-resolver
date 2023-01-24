@@ -4,8 +4,8 @@ import (
 	"context"
 
 	auth "github.com/backend-ids/authentication"
-	"github.com/backend-ids/src/models"
-	pb "github.com/backend-ids/src/proto"
+	pb "github.com/backend-ids/proto"
+	"github.com/backend-ids/src/schema/models"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc/codes"

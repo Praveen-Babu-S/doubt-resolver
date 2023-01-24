@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	pb "github.com/backend-ids/src/proto"
+	pb "github.com/backend-ids/proto"
 	_ "github.com/lib/pq"
 )
 

@@ -6,8 +6,8 @@ import (
 	"time"
 
 	auth "github.com/backend-ids/authentication"
-	"github.com/backend-ids/src/dbconfig"
-	pb "github.com/backend-ids/src/proto"
+	pb "github.com/backend-ids/proto"
+	"github.com/backend-ids/src/schema/dbconfig"
 	auth_server "github.com/backend-ids/src/server/auth_server"
 	ids_server "github.com/backend-ids/src/server/ids_server"
 	_ "github.com/lib/pq"
@@ -31,7 +31,7 @@ func accessibleRoles() map[string][]string {
 		idsServerPath + "CreateQuestion":  {"student"},
 		idsServerPath + "EditQuestion":    {"student"},
 		idsServerPath + "CreateSolution":  {"mentor"},
-		idsServerPath + "EditSolution":    {"student"},
+		idsServerPath + "EditSolution":    {"mentor"},
 		idsServerPath + "CreateComment":   {"student", "mentor"},
 		idsServerPath + "GetQuestionById": {"student"},
 		idsServerPath + "GetQuestions":    {"student"},
