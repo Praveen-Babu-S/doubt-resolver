@@ -1,8 +1,9 @@
 package dbOperations
 
 import (
-	"github.com/backend-ids/src/models"
-	pb "github.com/backend-ids/src/proto"
+	notify "github.com/backend-ids/notification"
+	pb "github.com/backend-ids/proto"
+	"github.com/backend-ids/src/schema/models"
 	"github.com/jinzhu/gorm"
 )
 
@@ -26,29 +27,54 @@ type DbClient struct {
 
 func (Db DbClient) CreateUser(u *models.User) {
 	Db.Db.Create(&u)
+	msg := notify.Mailinfo(u.Email, "Signed up Successfully!", "You have successfully signed-up for ids.")
+	notify.Notify(msg)
 }
 
 func (Db DbClient) EditUser(u *models.User, id uint64) {
 	Db.Db.Model(&models.User{}).Where("id = ?", id).Updates(u)
+	msg := notify.Mailinfo(u.Email, "Profile updated Successfully!", "You have successfully updated you profile details.")
+	go notify.Notify(msg)
 }
 
 func (Db DbClient) CreateSolution(sol *models.Solution) {
 	Db.Db.Create(&sol)
+	q := models.Question{}
+	Db.Db.Model(&models.Question{}).Where("id = ?", sol.QuestionID).Find(&q)
+	u := models.User{}
+	Db.Db.Model(&models.User{}).Where("id=?", q.StudentId).Find(&u)
+	msg := notify.Mailinfo(u.Email, "Posted Solution!", "Your mentor has posted solution for your question!")
+	go notify.Notify(msg)
 }
 
 func (Db DbClient) EditSolution(sol *models.Solution, sid uint64) {
 	Db.Db.Model(&models.Solution{}).Where("id = ?", sid).Updates(sol)
+	Db.Db.Find(&sol, sid)
+	q := models.Question{}
+	Db.Db.Model(&models.Question{}).Where("id = ?", sol.QuestionID).Find(&q)
+	u := models.User{}
+	Db.Db.Model(&models.User{}).Where("id=?", q.StudentId).Find(&u)
+	msg := notify.Mailinfo(u.Email, "Edited Solution!", "Your mentor has updated solution for your question!")
+	// fmt.Println("User : ", u)
+	go notify.Notify(msg)
 }
 
 func (Db DbClient) CreateQuestion(q *models.Question) {
 	u := models.User{}
 	Db.Db.Raw("SELECT id FROM users WHERE role=? and subject=? ORDER BY RANDOM() LIMIT 1", "mentor", q.Subject).Scan(&u)
 	q.AssigneeId = uint64(u.ID)
+	Db.Db.Model(&models.User{}).Where("id = ?", q.AssigneeId).Find(&u)
+	msg := notify.Mailinfo(u.Email, "New Question!", "You have been allocated new question!")
+	go notify.Notify(msg)
 	Db.Db.Create(&q)
 }
 
 func (Db DbClient) EditQuestion(q *models.Question, id uint64) {
 	Db.Db.Model(&models.Question{}).Where("id = ?", id).Updates(q)
+	u := models.User{}
+	Db.Db.Model(&models.User{}).Where("id = ?", q.AssigneeId).Find(&u)
+	msg := notify.Mailinfo(u.Email, "Question updated!", "The question allocated to you has been modified, please check it!")
+	go notify.Notify(msg)
 }
 
 func (Db DbClient) CreateComment(c *models.Comment) {

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.12.4
-// source: src/proto/ids.proto
+// source: proto/ids.proto
 
 package backend_ids
 
@@ -503,5 +503,5 @@ var IdsCRUD_ServiceDesc = grpc.ServiceDesc{
 			ServerStreams: true,
 		},
 	},
-	Metadata: "src/proto/ids.proto",
+	Metadata: "proto/ids.proto",
 }

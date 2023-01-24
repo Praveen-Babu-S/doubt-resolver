@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/backend-ids/src/models"
-	pb "github.com/backend-ids/src/proto"
+	pb "github.com/backend-ids/proto"
+	"github.com/backend-ids/src/schema/models"
 	_ "github.com/lib/pq"
 )
 

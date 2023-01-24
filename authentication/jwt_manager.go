@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/backend-ids/src/models"
+	"github.com/backend-ids/src/schema/models"
 	"github.com/dgrijalva/jwt-go"
 )
 

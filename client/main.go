@@ -6,9 +6,9 @@ import (
 	"time"
 
 	auth "github.com/backend-ids/authentication"
+	pb "github.com/backend-ids/proto"
 	auth_client "github.com/backend-ids/src/client/auth_client"
 	ids_client "github.com/backend-ids/src/client/ids_client"
-	pb "github.com/backend-ids/src/proto"
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -37,7 +37,7 @@ func main() {
 	}
 	defer conn.Close()
 	//client2 --->auth_client
-	client2 := auth_client.NewAuthClient(conn, "user-4", "asdqw#$f123@G")
+	client2 := auth_client.NewAuthClient(conn, "user-2", "123456")
 	token, err := client2.Login()
 	if err != nil {
 		log.Panic(err)
@@ -57,13 +57,13 @@ func main() {
 	//client1 ---> ids_client
 	client1 := pb.NewIdsCRUDClient(clientConnection)
 	fmt.Println(client1)
-	// ids_client.CreateQuestion(client1, "subject-1", "new question", 6)
-	// ids_client.EditQuestion(client1, 1, "subject-1", "modified description", 1, 2, 1)
-	// ids_client.CreateSolution(client1, "slution 3", 3, 3)
-	// ids_client.EditSolution(client1, 2, "another approach", 2, 3)
+	// ids_client.CreateQuestion(client1, "subject-1", "question by Praveen", 7)
+	// ids_client.EditQuestion(client1, 7, "subject-1", "modified description", 7, 2, 7)
+	// ids_client.CreateSolution(client1, "new solution", 2, 7)
+	ids_client.EditSolution(client1, 3, "solution a approach", 2, 7)
 	// ids_client.CreateComment(client1, "ok will do", 1, 3)
 	// ids_client.GetQuestions(client1, 1)
-	ids_client.GetQuestionById(client1, 3, 4)
-	// ids_client.CreateUser(client1, "user-6", "email-6@email.com", "123456", "student", "")
-	// ids_client.UpdateUserDetails(client1, 5, "user-5", "email-5@email.com", "123123", "mentor", "")
+	// ids_client.GetQuestionById(client1, 3, 4)
+	// ids_client.CreateUser(client1, "user-7", "praveen@beautifulcode.in", "123456", "student", "")
+	// ids_client.UpdateUserDetails(client1, 5, "Praveen", "praveen@beautifulcode.in", "123456", "", "")
 }

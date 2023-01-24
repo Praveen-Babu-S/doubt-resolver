@@ -3,8 +3,8 @@ package server
 import (
 	"context"
 
-	DB "github.com/backend-ids/src/db"
-	pb "github.com/backend-ids/src/proto"
+	pb "github.com/backend-ids/proto"
+	DB "github.com/backend-ids/src/schema/db"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
 )

@@ -7,8 +7,8 @@ package dbOperations
 import (
 	reflect "reflect"
 
-	models "github.com/backend-ids/src/models"
-	proto "github.com/backend-ids/src/proto"
+	models "github.com/backend-ids/src/schema/models"
+	proto "github.com/backend-ids/proto"
 	gomock "github.com/golang/mock/gomock"
 )
 

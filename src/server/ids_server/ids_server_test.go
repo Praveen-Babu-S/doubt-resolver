@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	db "github.com/backend-ids/src/db"
-	pb "github.com/backend-ids/src/proto"
+	pb "github.com/backend-ids/proto"
+	db "github.com/backend-ids/src/schema/db"
 	utils "github.com/backend-ids/utils"
 	"github.com/golang/mock/gomock"
 )
